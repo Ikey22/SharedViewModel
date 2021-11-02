@@ -6,11 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.sharedviewmodel.databinding.FragmentPickupBinding
+import com.example.sharedviewmodel.model.OrderViewModel
 
 
 class PickupFragment : Fragment() {
     private var binding: FragmentPickupBinding? = null
+    private val sharedViewModel: OrderViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,13 +29,15 @@ class PickupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding?.apply {
-            nextButton.setOnClickListener { goToNextScreen() }
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = sharedViewModel
+            pickup = this@PickupFragment
         }
     }
 
 
     fun goToNextScreen() {
-        Toast.makeText(activity, "Next", Toast.LENGTH_SHORT).show()
+        findNavController().navigate(R.id.action_pickupFragment_to_summaryFragment)
     }
 
     override fun onDestroyView() {
